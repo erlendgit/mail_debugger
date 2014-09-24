@@ -18,16 +18,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-function mg_maildemo_callback($form, &$form_state) {
+/**
+ * Callback for drupal_get_form
+ * 
+ * @param array $form
+ * @param array $form_state
+ * @return array
+ */
+function mail_debugger_callback($form, &$form_state) {
   $users = db_select('users', 'u')->fields('u')->execute()->fetchAllAssoc('uid');
-  
-  foreach($users as $uid => $account) {
+
+  foreach ($users as $uid => $account) {
     if (!valid_email_address($account->mail)) {
       continue;
     }
     $options[$uid] = format_username($account) . ' (' . $account->mail . ')';
   }
-  
+
   return array(
     '#tree' => TRUE,
     'user' => array(
@@ -59,8 +66,8 @@ function mg_maildemo_callback($form, &$form_state) {
         '#type' => 'submit',
         '#name' => 'user_mail',
         '#value' => t('Send mail'),
-        '#submit' => array('mg_maildemo_callback_submit_user_mail'),
-        '#validate' => array('mg_maildemo_callback_valid_user_mail'),
+        '#submit' => array('mail_debugger_callback_submit_user_mail'),
+        '#validate' => array('mail_debugger_callback_valid_user_mail'),
       ),
     ),
     'custom' => array(
@@ -82,56 +89,72 @@ function mg_maildemo_callback($form, &$form_state) {
         '#type' => 'submit',
         '#name' => 'custom_mail',
         '#value' => t('Send mail'),
-        '#submit' => array('mg_maildemo_callback_submit_custom_mail'),
+        '#submit' => array('mail_debugger_callback_submit_custom_mail'),
+        '#validate' => array('mail_debugger_callback_valid_custom_mail'),
       ),
     )
   );
 }
 
-function mg_maildemo_callback_valid_user_mail($form, &$form_state) {
-  $opts = (object)$form_state['values']['user'];
+/**
+ * Validate function for mail_debugger_callback_submit_user_mail()
+ * 
+ * @param array $form
+ * @param array $form_state
+ */
+function mail_debugger_callback_valid_user_mail($form, &$form_state) {
+  $opts = (object) $form_state['values']['user'];
   $account = user_load($opts->uid);
-  
+
   if (!$account->uid) {
     form_set_error('user][uid', 'User does not exist.');
   } else {
     $form_state['user_account'] = $account;
   }
 }
-function mg_maildemo_callback_submit_user_mail($form, &$form_state) {
-  $opts = (object)$form_state['values']['user'];
-  
+
+/**
+ * Form submit handler
+ * 
+ * @param array $form
+ * @param array $form_state
+ */
+function mail_debugger_callback_submit_user_mail($form, &$form_state) {
+  $opts = (object) $form_state['values']['user'];
+
   if (!$opts->realy) {
     drupal_set_message(t('Send a mail to !username? Select <strong>Realy</strong>', array('!username' => $form_state['user_account']->mail)));
     $form_state['rebuild'] = TRUE;
     return;
   }
 
-  _user_mail_notify($opts->type, $form_state['user_account'], 'NL');
+  _user_mail_notify($opts->type, $form_state['user_account']);
 }
 
-function mg_maildemo_callback_valid_custom_mail($form, &$form_state) {
-  $opts = (object)$form_state['values']['custom'];
+/**
+ * Validate function for mail_debugger_callback_submit_custom_mail()
+ * 
+ * @param array $form
+ * @param array $form_state
+ */
+function mail_debugger_callback_valid_custom_mail($form, &$form_state) {
+  $opts = (object) $form_state['values']['custom'];
   if (!valid_email_address($opts->to)) {
     form_set_error('custom][to', 'Invalid e-mail address');
   }
 }
-function mg_maildemo_callback_submit_custom_mail($form, &$form_state) {
-  $opts = (object)$form_state['values']['custom'];
-  
+
+/**
+ * Form submit handler
+ * 
+ * @param array $form
+ * @param array $form_state
+ */
+function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
+  $opts = (object) $form_state['values']['custom'];
+
   drupal_mail('mg_maildemo', 'custom_mail', $opts->to, NULL, array(
     'body' => $opts->body,
     'subject' => $opts->subject,
   ));
-}
-
-function mg_maildemo_mail($key, &$message, $params) {
-  switch($key) {
-    case 'custom_mail':
-      $message['body'] = array($params['body']);
-      $message['subject'] = $params['subject'];
-      break;
-    default:
-      break;
-  }
 }

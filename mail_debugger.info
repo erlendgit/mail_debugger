@@ -1,5 +1,6 @@
-name = Maildemo
-description = Test system mails, or an alternative mail
+name = Mail debugger
+description = Test system mails
 core = 7.x
-package = Mediagrip
+package = Development
 configure = admin/config
+tags[] = developer
