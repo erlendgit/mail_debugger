@@ -149,8 +149,6 @@ function mail_debugger_callback_valid_custom_mail($form, &$form_state) {
 function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
   $opts = (object) $form_state['values']['custom'];
   
-  dpm($opts);
-
   $mail = drupal_mail('mail_debugger', 'custom_mail', $opts->to, NULL, array(
     'body' => $opts->body,
     'subject' => $opts->subject,
