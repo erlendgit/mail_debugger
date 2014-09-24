@@ -27,10 +27,12 @@ function mail_debugger_menu() {
     'admin/people/mail_debugger' => array(
       'title' => "Mail debugger",
       'description' => "Test the mail interface",
-      'page arguments' => array('mg_maildemo_callback'),
+      'page arguments' => array('mail_debugger_callback'),
       'page callback' => 'drupal_get_form',
       'access arguments' => array('administer site configuration'),
-      'file' => 'mg_maildemo.callback.inc',
+      'file' => 'includes/mail_debugger.callback.inc',
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 100,
     ),
   );
 }

@@ -58,10 +58,6 @@ function mail_debugger_callback($form, &$form_state) {
           'status_canceled' => t('Account canceled.'),
         ),
       ),
-      'realy' => array(
-        '#type' => 'checkbox',
-        '#title' => t('Realy'),
-      ),
       'submit' => array(
         '#type' => 'submit',
         '#name' => 'user_mail',
@@ -122,13 +118,13 @@ function mail_debugger_callback_valid_user_mail($form, &$form_state) {
 function mail_debugger_callback_submit_user_mail($form, &$form_state) {
   $opts = (object) $form_state['values']['user'];
 
-  if (!$opts->realy) {
-    drupal_set_message(t('Send a mail to !username? Select <strong>Realy</strong>', array('!username' => $form_state['user_account']->mail)));
-    $form_state['rebuild'] = TRUE;
-    return;
+  $result = _user_mail_notify($opts->type, $form_state['user_account']);
+  
+  if ($result) {
+    drupal_set_message(t('Message sent'));
+  } else {
+    drupal_set_message(t('Message sent with errors. Check the error log.'), 'warning');
   }
-
-  _user_mail_notify($opts->type, $form_state['user_account']);
 }
 
 /**
@@ -152,9 +148,17 @@ function mail_debugger_callback_valid_custom_mail($form, &$form_state) {
  */
 function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
   $opts = (object) $form_state['values']['custom'];
+  
+  dpm($opts);
 
-  drupal_mail('mg_maildemo', 'custom_mail', $opts->to, NULL, array(
+  $result = drupal_mail('mail_debugger', 'custom_mail', $opts->to, NULL, array(
     'body' => $opts->body,
     'subject' => $opts->subject,
   ));
+
+  if ($result) {
+    drupal_set_message(t('Message sent'));
+  } else {
+    drupal_set_message(t('Message sent with errors. Check the error log.'), 'warning');
+  }
 }
