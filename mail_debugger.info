@@ -1,0 +1,5 @@
+name = Maildemo
+description = Test system mails, or an alternative mail
+core = 7.x
+package = Mediagrip
+configure = admin/config
