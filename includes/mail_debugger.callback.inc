@@ -151,12 +151,12 @@ function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
   
   dpm($opts);
 
-  $result = drupal_mail('mail_debugger', 'custom_mail', $opts->to, NULL, array(
+  $mail = drupal_mail('mail_debugger', 'custom_mail', $opts->to, NULL, array(
     'body' => $opts->body,
     'subject' => $opts->subject,
   ));
 
-  if ($result) {
+  if ($mail && $mail['result']) {
     drupal_set_message(t('Message sent'));
   } else {
     drupal_set_message(t('Message sent with errors. Check the error log.'), 'warning');
