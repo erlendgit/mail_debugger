@@ -1,5 +1,5 @@
 name = Mail debugger
-description = Test system mails
+description = Test the mail system
 core = 7.x
 package = Development
 configure = admin/people/mail_debugger

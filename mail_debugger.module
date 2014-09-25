@@ -29,7 +29,7 @@ function mail_debugger_menu() {
       'description' => "Test the mail interface",
       'page arguments' => array('mail_debugger_callback'),
       'page callback' => 'drupal_get_form',
-      'access arguments' => array('administer site configuration'),
+      'access arguments' => array('administer users'),
       'file' => 'includes/mail_debugger.callback.inc',
       'type' => MENU_LOCAL_TASK,
       'weight' => 100,

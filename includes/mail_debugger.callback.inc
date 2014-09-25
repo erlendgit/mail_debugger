@@ -37,16 +37,23 @@ function mail_debugger_callback($form, &$form_state) {
 
   return array(
     '#tree' => TRUE,
+    'tab_group' => array(
+      '#type' => 'vertical_tabs',
+      '#default_tab' => variable_get('mail_debugger_default_tab'),
+    ),
     'user' => array(
       '#type' => 'fieldset',
-      '#title' => t('User mail'),
+      '#title' => t('User'),
+      '#group' => 'tab_group',
       'uid' => array(
         '#type' => 'select',
-        '#title' => t('User id'),
+        '#title' => t('User'),
         '#options' => $options,
+        '#default_value' => variable_get('mail_debugger_user_uid'),
       ),
       'type' => array(
         '#type' => 'select',
+        '#title' => t('Message'),
         '#options' => array(
           'register_admin_created' => t('Welcome message for user created by the admin.'),
           'register_no_approval_required' => t('Welcome message when user self-registers.'),
@@ -57,56 +64,50 @@ function mail_debugger_callback($form, &$form_state) {
           'cancel_confirm' => t('Account cancellation request.'),
           'status_canceled' => t('Account canceled.'),
         ),
+        '#default_value' => variable_get('mail_debugger_user_type'),
       ),
       'submit' => array(
         '#type' => 'submit',
         '#name' => 'user_mail',
         '#value' => t('Send mail'),
-        '#submit' => array('mail_debugger_callback_submit_user_mail'),
-        '#validate' => array('mail_debugger_callback_valid_user_mail'),
+        '#submit' => array(
+          'mail_debugger_callback_submit_user_mail',
+          'mail_debugger_callback_submit',
+        ),
       ),
     ),
     'custom' => array(
       '#type' => 'fieldset',
       '#title' => t('Custom mail'),
+      '#group' => 'tab_group',
+      '#collapsed' => TRUE,
       'to' => array(
         '#type' => 'textfield',
         '#title' => t('To'),
+        '#default_value' => variable_get('mail_debugger_custom_to'),
       ),
       'subject' => array(
         '#type' => 'textfield',
         '#title' => t('Subject'),
+        '#default_value' => variable_get('mail_debugger_custom_subject'),
       ),
       'body' => array(
         '#type' => 'textarea',
         '#title' => t('Message'),
+        '#default_value' => variable_get('mail_debugger_custom_body'),
       ),
       'submit' => array(
         '#type' => 'submit',
         '#name' => 'custom_mail',
         '#value' => t('Send mail'),
-        '#submit' => array('mail_debugger_callback_submit_custom_mail'),
+        '#submit' => array(
+          'mail_debugger_callback_submit_custom_mail',
+          'mail_debugger_callback_submit',
+        ),
         '#validate' => array('mail_debugger_callback_valid_custom_mail'),
       ),
     )
   );
-}
-
-/**
- * Validate function for mail_debugger_callback_submit_user_mail()
- * 
- * @param array $form
- * @param array $form_state
- */
-function mail_debugger_callback_valid_user_mail($form, &$form_state) {
-  $opts = (object) $form_state['values']['user'];
-  $account = user_load($opts->uid);
-
-  if (!$account->uid) {
-    form_set_error('user][uid', 'User does not exist.');
-  } else {
-    $form_state['user_account'] = $account;
-  }
 }
 
 /**
@@ -116,10 +117,12 @@ function mail_debugger_callback_valid_user_mail($form, &$form_state) {
  * @param array $form_state
  */
 function mail_debugger_callback_submit_user_mail($form, &$form_state) {
+  variable_set('mail_debugger_default_tab', 'edit-user');
+  
   $opts = (object) $form_state['values']['user'];
 
   $result = _user_mail_notify($opts->type, $form_state['user_account']);
-  
+
   if ($result) {
     drupal_set_message(t('Message sent'));
   } else {
@@ -134,8 +137,7 @@ function mail_debugger_callback_submit_user_mail($form, &$form_state) {
  * @param array $form_state
  */
 function mail_debugger_callback_valid_custom_mail($form, &$form_state) {
-  $opts = (object) $form_state['values']['custom'];
-  if (!valid_email_address($opts->to)) {
+  if (!valid_email_address($form_state['values']['custom']['to'])) {
     form_set_error('custom][to', 'Invalid e-mail address');
   }
 }
@@ -147,8 +149,10 @@ function mail_debugger_callback_valid_custom_mail($form, &$form_state) {
  * @param array $form_state
  */
 function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
+  variable_set('mail_debugger_default_tab', 'edit-custom');
+
   $opts = (object) $form_state['values']['custom'];
-  
+
   $mail = drupal_mail('mail_debugger', 'custom_mail', $opts->to, NULL, array(
     'body' => $opts->body,
     'subject' => $opts->subject,
@@ -159,4 +163,18 @@ function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
   } else {
     drupal_set_message(t('Message sent with errors. Check the error log.'), 'warning');
   }
+}
+
+/**
+ * Form submit handler. Store form data to variables.
+ * 
+ * @param array $form
+ * @param array $form_state
+ */
+function mail_debugger_callback_submit($form, &$form_state) {
+  variable_set('mail_debugger_user_uid', $form_state['values']['user']['uid']);
+  variable_set('mail_debugger_user_type', $form_state['values']['user']['type']);
+  variable_set('mail_debugger_custom_to', $form_state['values']['custom']['to']);
+  variable_set('mail_debugger_custom_subject', $form_state['values']['custom']['subject']);
+  variable_set('mail_debugger_custom_body', $form_state['values']['custom']['body']);
 }
