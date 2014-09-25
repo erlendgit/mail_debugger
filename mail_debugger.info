@@ -4,3 +4,4 @@ core = 7.x
 package = Development
 configure = admin/people/mail_debugger
 tags[] = developer
+dependencies[] = user_variable

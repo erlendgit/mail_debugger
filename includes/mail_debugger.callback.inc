@@ -39,7 +39,7 @@ function mail_debugger_callback($form, &$form_state) {
     '#tree' => TRUE,
     'tab_group' => array(
       '#type' => 'vertical_tabs',
-      '#default_tab' => variable_get('mail_debugger_default_tab'),
+      '#default_tab' => user_variable_get('mail_debugger_default_tab'),
     ),
     'user' => array(
       '#type' => 'fieldset',
@@ -49,7 +49,7 @@ function mail_debugger_callback($form, &$form_state) {
         '#type' => 'select',
         '#title' => t('User'),
         '#options' => $options,
-        '#default_value' => variable_get('mail_debugger_user_uid'),
+        '#default_value' => user_variable_get('mail_debugger_user_uid'),
       ),
       'type' => array(
         '#type' => 'select',
@@ -64,7 +64,7 @@ function mail_debugger_callback($form, &$form_state) {
           'cancel_confirm' => t('Account cancellation request.'),
           'status_canceled' => t('Account canceled.'),
         ),
-        '#default_value' => variable_get('mail_debugger_user_type'),
+        '#default_value' => user_variable_get('mail_debugger_user_type'),
       ),
       'submit' => array(
         '#type' => 'submit',
@@ -84,17 +84,17 @@ function mail_debugger_callback($form, &$form_state) {
       'to' => array(
         '#type' => 'textfield',
         '#title' => t('To'),
-        '#default_value' => variable_get('mail_debugger_custom_to'),
+        '#default_value' => user_variable_get('mail_debugger_custom_to'),
       ),
       'subject' => array(
         '#type' => 'textfield',
         '#title' => t('Subject'),
-        '#default_value' => variable_get('mail_debugger_custom_subject'),
+        '#default_value' => user_variable_get('mail_debugger_custom_subject'),
       ),
       'body' => array(
         '#type' => 'textarea',
         '#title' => t('Message'),
-        '#default_value' => variable_get('mail_debugger_custom_body'),
+        '#default_value' => user_variable_get('mail_debugger_custom_body'),
       ),
       'submit' => array(
         '#type' => 'submit',
@@ -117,7 +117,7 @@ function mail_debugger_callback($form, &$form_state) {
  * @param array $form_state
  */
 function mail_debugger_callback_submit_user_mail($form, &$form_state) {
-  variable_set('mail_debugger_default_tab', 'edit-user');
+  user_variable_set('mail_debugger_default_tab', 'edit-user');
   
   $opts = (object) $form_state['values']['user'];
 
@@ -149,7 +149,7 @@ function mail_debugger_callback_valid_custom_mail($form, &$form_state) {
  * @param array $form_state
  */
 function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
-  variable_set('mail_debugger_default_tab', 'edit-custom');
+  user_variable_set('mail_debugger_default_tab', 'edit-custom');
 
   $opts = (object) $form_state['values']['custom'];
 
@@ -172,9 +172,9 @@ function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
  * @param array $form_state
  */
 function mail_debugger_callback_submit($form, &$form_state) {
-  variable_set('mail_debugger_user_uid', $form_state['values']['user']['uid']);
-  variable_set('mail_debugger_user_type', $form_state['values']['user']['type']);
-  variable_set('mail_debugger_custom_to', $form_state['values']['custom']['to']);
-  variable_set('mail_debugger_custom_subject', $form_state['values']['custom']['subject']);
-  variable_set('mail_debugger_custom_body', $form_state['values']['custom']['body']);
+  user_variable_set('mail_debugger_user_uid', $form_state['values']['user']['uid']);
+  user_variable_set('mail_debugger_user_type', $form_state['values']['user']['type']);
+  user_variable_set('mail_debugger_custom_to', $form_state['values']['custom']['to']);
+  user_variable_set('mail_debugger_custom_subject', $form_state['values']['custom']['subject']);
+  user_variable_set('mail_debugger_custom_body', $form_state['values']['custom']['body']);
 }

@@ -22,10 +22,10 @@
  * Implement hook_uninstall()
  */
 function mail_debugger_uninstall() {
-  variable_del('mail_debugger_user_uid');
-  variable_del('mail_debugger_user_type');
-  variable_del('mail_debugger_custom_to');
-  variable_del('mail_debugger_custom_subject');
-  variable_del('mail_debugger_custom_body');
-  variable_del('mail_debugger_default_tab');
+  user_variable_del('mail_debugger_user_uid');
+  user_variable_del('mail_debugger_user_type');
+  user_variable_del('mail_debugger_custom_to');
+  user_variable_del('mail_debugger_custom_subject');
+  user_variable_del('mail_debugger_custom_body');
+  user_variable_del('mail_debugger_default_tab');
 }
