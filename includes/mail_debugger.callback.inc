@@ -10,7 +10,11 @@ function _mail_debugger_load_users() {
   if (!is_array($options)) {
     // load the users to prepopulate the user select dropdown
     $options = array();
-    $users = db_select('users', 'u')->fields('u')->execute()->fetchAllAssoc('uid');
+    $users = db_select('users', 'u')->fields('u')
+      ->orderBy('created', 'DESC')
+      ->range(0, 50)
+      ->execute()
+      ->fetchAllAssoc('uid');
     foreach ($users as $uid => $account) {
       if (!valid_email_address($account->mail)) {
         continue;
