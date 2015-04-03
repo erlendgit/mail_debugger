@@ -5,9 +5,17 @@
  */
 function mail_debugger_uninstall() {
   user_variable_del('mail_debugger_user_uid');
+  user_variable_del('mail_debugger_user_mail');
   user_variable_del('mail_debugger_user_type');
   user_variable_del('mail_debugger_custom_to');
   user_variable_del('mail_debugger_custom_subject');
   user_variable_del('mail_debugger_custom_body');
   user_variable_del('mail_debugger_default_tab');
+}
+
+/**
+ * Remove unused field from the 1.x version
+ */
+function mail_debugger_update_7200() {
+  user_variable_del('mail_debugger_user_uid');
 }

@@ -1,35 +1,6 @@
 <?php
 
 /**
- * Load uid, username and mail from the users table
- * @return array
- */
-function _mail_debugger_load_users() {
-  $options = &drupal_static(__FUNCTION__);
-
-  if (!is_array($options)) {
-    // load the users to prepopulate the user select dropdown
-    $options = array();
-    $users = db_select('users', 'u')->fields('u')
-      ->orderBy('created', 'DESC')
-      ->range(0, 50)
-      ->execute()
-      ->fetchAllAssoc('uid');
-    foreach ($users as $uid => $account) {
-      if (!valid_email_address($account->mail)) {
-        continue;
-      }
-      $options[$uid] = t('!name (!mail)', array(
-        '!name' => format_username($account),
-        '!mail' => $account->mail
-      ));
-    }
-  }
-
-  return $options;
-}
-
-/**
  * Callback for drupal_get_form
  * 
  * @param array $form
@@ -48,11 +19,10 @@ function mail_debugger_callback($form, &$form_state) {
       '#type' => 'fieldset',
       '#title' => t('User'),
       '#group' => 'tab_group',
-      'uid' => array(
-        '#type' => 'select',
-        '#title' => t('User'),
-        '#options' => _mail_debugger_load_users(),
-        '#default_value' => user_variable_get('mail_debugger_user_uid'),
+      'mail' => array(
+        '#type' => 'textfield',
+        '#title' => t('E-mail address'),
+        '#default_value' => user_variable_get('mail_debugger_user_mail'),
       ),
       'type' => array(
         '#type' => 'select',
@@ -76,6 +46,9 @@ function mail_debugger_callback($form, &$form_state) {
         '#submit' => array(
           'mail_debugger_callback_submit_user_mail',
           'mail_debugger_callback_submit',
+        ),
+        '#validate' => array(
+          'mail_debugger_callback_valid_user_mail',
         ),
       ),
     ),
@@ -113,6 +86,14 @@ function mail_debugger_callback($form, &$form_state) {
   );
 }
 
+function mail_debugger_callback_valid_user_mail($form, &$form_state) {
+  $user = user_load_by_mail($form_state['values']['user']['mail']);
+
+  if (!$user) {
+    form_set_error("user][mail", t('This e-mail address does not match any user.'));
+  }
+}
+
 /**
  * Form submit handler
  * 
@@ -124,13 +105,13 @@ function mail_debugger_callback_submit_user_mail($form, &$form_state) {
   user_variable_set('mail_debugger_default_tab', 'edit-user');
 
   // where to send the mail to?
-  $opts = (object) $form_state['values']['user'];
+  $values = $form_state['values']['user'];
 
   // load the user account
-  $account = user_load($opts->uid);
+  $account = user_load_by_mail($values['mail']);
 
   // send the mail
-  $result = _user_mail_notify($opts->type, $account);
+  $result = _user_mail_notify($values['type'], $account);
 
   // Notify about the result
   if ($result) {
@@ -188,7 +169,7 @@ function mail_debugger_callback_submit_custom_mail($form, &$form_state) {
  */
 function mail_debugger_callback_submit($form, &$form_state) {
   // store the parameters
-  user_variable_set('mail_debugger_user_uid', $form_state['values']['user']['uid']);
+  user_variable_set('mail_debugger_user_mail', $form_state['values']['user']['mail']);
   user_variable_set('mail_debugger_user_type', $form_state['values']['user']['type']);
   user_variable_set('mail_debugger_custom_to', $form_state['values']['custom']['to']);
   user_variable_set('mail_debugger_custom_subject', $form_state['values']['custom']['subject']);
