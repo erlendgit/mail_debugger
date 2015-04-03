@@ -88,9 +88,35 @@ function mail_debugger_callback($form, &$form_state) {
 
 function mail_debugger_callback_valid_user_mail($form, &$form_state) {
   $user = user_load_by_mail($form_state['values']['user']['mail']);
+  $values = $form_state['values']['user'];
 
   if (!$user) {
-    form_set_error("user][mail", t('This e-mail address does not match any user.'));
+    if (valid_email_address($values['mail'])) {
+      $test = explode('@', $values['mail'], 2);
+      $test = reset($test);
+    } else {
+      $test = $values['mail'];
+    }
+  
+    $query = db_like($test) . '%';
+    $result = db_select('users', 'u')->fields('u')
+      ->condition('mail', $query, 'like')
+      ->condition('status', 1)
+      ->orderBy('mail')
+      ->range(0, 5)
+      ->execute()
+      ->fetchAll();
+    foreach($result as $item) {
+      $didyoumean[] = $item->mail;
+    }
+
+    if (count($didyoumean)>0) {
+      form_set_error('user][mail', t("Did you mean @alternatives?", array(
+        '@alternatives' => implode(', ', $didyoumean)
+      )));
+    } else {
+      form_set_error("user][mail", t('This e-mail address does not match any user.'));
+    }
   }
 }
 
