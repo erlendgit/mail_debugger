@@ -2,6 +2,6 @@ name = Mail debugger
 description = Test the mail system
 core = 7.x
 package = Development
-configure = admin/people/mail_debugger
+configure = admin/config/development/mail_debugger
 tags[] = developer
 dependencies[] = user_variable

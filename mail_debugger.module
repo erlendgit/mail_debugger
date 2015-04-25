@@ -6,7 +6,7 @@
  */
 function mail_debugger_menu() {
   return array(
-    'admin/people/mail_debugger' => array(
+    'admin/config/development/mail_debugger' => array(
       'title' => "Mail debugger",
       'description' => "Test the mail interface",
       'page arguments' => array('mail_debugger_callback'),
@@ -14,7 +14,6 @@ function mail_debugger_menu() {
       'access arguments' => array('administer users'),
       'file' => 'includes/mail_debugger.callback.inc',
       'type' => MENU_LOCAL_TASK,
-      'weight' => 100,
     ),
   );
 }
