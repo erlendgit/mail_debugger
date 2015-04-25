@@ -5,15 +5,23 @@
  * @return type
  */
 function mail_debugger_menu() {
+  $access_arguments = array('administer users');
+  
   return array(
     'admin/config/development/mail_debugger' => array(
       'title' => "Mail debugger",
       'description' => "Test the mail interface",
       'page arguments' => array('mail_debugger_callback'),
       'page callback' => 'drupal_get_form',
-      'access arguments' => array('administer users'),
+      'access arguments' => $access_arguments,
       'file' => 'includes/mail_debugger.callback.inc',
       'type' => MENU_LOCAL_TASK,
+    ),
+    'admin/config/development/mail_debugger/autocomplete_mail' => array(
+      'page callback' => 'mail_debugger_callback_autocomplete_mail',
+      'access arguments' => $access_arguments,
+      'file' => 'includes/mail_debugger.callback.inc',
+      'type' => MENU_CALLBACK,
     ),
   );
 }

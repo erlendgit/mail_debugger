@@ -23,6 +23,7 @@ function mail_debugger_callback($form, &$form_state) {
         '#type' => 'textfield',
         '#title' => t('E-mail address'),
         '#default_value' => user_variable_get('mail_debugger_user_mail'),
+        '#autocomplete_path' => 'admin/config/development/mail_debugger/autocomplete_mail',
       ),
       'type' => array(
         '#type' => 'select',
@@ -200,4 +201,26 @@ function mail_debugger_callback_submit($form, &$form_state) {
   user_variable_set('mail_debugger_custom_to', $form_state['values']['custom']['to']);
   user_variable_set('mail_debugger_custom_subject', $form_state['values']['custom']['subject']);
   user_variable_set('mail_debugger_custom_body', $form_state['values']['custom']['body']);
+}
+
+
+function mail_debugger_callback_autocomplete_mail($query = '') {
+  if (empty($query)) {
+    return;
+  }
+  
+  $result = db_select('users', 'u')
+    ->fields('u', array('mail', 'name'))
+    ->condition('u.mail', db_like($query). '%', 'LIKE')
+    ->condition('status', 1)
+    ->range(0, 10)
+    ->execute()
+    ->fetchAll();
+  
+  $complete = array();
+  foreach($result as $obj) {
+    $complete[$obj->mail] = $obj->mail . ' (' . $obj->name . ')';
+  }
+  
+  drupal_json_output($complete);
 }
