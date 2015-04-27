@@ -7,7 +7,7 @@
  * @return array|boolian
  */
 function mail_debugger_basic_form($default_values = array()) {
-  if (!user_access('use mail debugger basics')) {
+  if (!user_access('use mail debugger basic')) {
     return FALSE;
   }
   
