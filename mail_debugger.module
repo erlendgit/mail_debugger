@@ -1,45 +1,48 @@
 <?php
 
 /**
- * Implement hook_menu()
+ * Implement hook_permission();
+ * 
+ * @return array
+ */
+function mail_debugger_permission() {
+  return array(
+    'use mail debugger tools' => array(
+      'title' => t('Use mail debugger tools'),
+    ),
+  );
+}
+
+/**
+ * Implement hook_menu();
  * @return type
  */
 function mail_debugger_menu() {
-  $access_arguments = array('administer users');
-  
   return array(
     'admin/config/development/mail_debugger' => array(
       'title' => "Mail debugger",
       'description' => "Test the mail interface",
       'page arguments' => array('mail_debugger_callback'),
       'page callback' => 'drupal_get_form',
-      'access arguments' => $access_arguments,
+      'access arguments' => array('use mail debugger tools'),
       'file' => 'includes/mail_debugger.callback.inc',
       'type' => MENU_LOCAL_TASK,
-    ),
-    'admin/config/development/mail_debugger/autocomplete_mail' => array(
-      'page callback' => 'mail_debugger_callback_autocomplete_mail',
-      'access arguments' => $access_arguments,
-      'file' => 'includes/mail_debugger.callback.inc',
-      'type' => MENU_CALLBACK,
     ),
   );
 }
 
 /**
- * Implement hook_mail()
+ * Implement hook_hook_info();
  * 
- * @param string $key
- * @param array $message
- * @param array $params
+ * @return array()
  */
-function mail_debugger_mail($key, &$message, $params) {
-  switch($key) {
-    case 'custom_mail':
-      $message['body'] = array($params['body']);
-      $message['subject'] = $params['subject'];
-      break;
-    default:
-      break;
-  }
+function mail_debugger_hook_info() {
+  return array(
+    'mail_debugger_info' => array(
+      'group' => 'mail_debugger',
+    ),
+    'mail_debugger_info_alter' => array(
+      'group' => 'mail_debugger',
+    ),
+  );
 }

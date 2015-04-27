@@ -1,0 +1,5 @@
+name = Mail debugger common
+description = Mail debugger extention to send basic mails
+package = Development
+dependencies[] = mail_debugger
+core = 7.x

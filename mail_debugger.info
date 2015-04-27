@@ -1,5 +1,5 @@
-name = Mail debugger
-description = Test the mail system
+name = Mail debugger API
+description = Framework for testing the mail system
 core = 7.x
 package = Development
 configure = admin/config/development/mail_debugger
