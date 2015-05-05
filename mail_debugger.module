@@ -9,6 +9,7 @@ function mail_debugger_permission() {
   return array(
     'use mail debugger tools' => array(
       'title' => t('Use mail debugger tools'),
+      'restrict access' => TRUE,
     ),
   );
 }

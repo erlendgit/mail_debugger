@@ -74,7 +74,15 @@ function mail_debugger_common_mail($key, &$message, $params) {
  */
 function mail_debugger_common_permission() {
   return array(
-    'use mail debugger basic' => array(),
-    'use mail debugger user' => array(),
+    'use mail debugger basic' => array(
+      'title' => t('Use mail debugger basic'),
+      // Risk: like spamming users as if it was from this site
+      'restrict access' => TRUE,
+    ),
+    'use mail debugger user' => array(
+      'title' => t('Use mail debugger user'),
+      // Risk: like sending confusing mails to site members
+      'restrict access' => TRUE,
+    ),
   );
 }
