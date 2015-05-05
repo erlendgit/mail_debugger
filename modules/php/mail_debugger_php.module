@@ -29,6 +29,7 @@ function mail_debugger_php_mail_debugger_info() {
 function mail_debugger_php_permission() {
   return array(
     'use mail debugger php' => array(
+      'title' => t('Use mail debugger php'),
       // since we expose a PHP interface to the front-end: warn the system admin.
       'restrict access' => TRUE,
     ),
