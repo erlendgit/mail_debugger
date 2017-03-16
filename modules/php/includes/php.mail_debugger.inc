@@ -30,7 +30,7 @@ function mail_debugger_php_form($default_values = array()) {
   // add contrib section of the form.
   return array(
     'info' => array(
-      '#markup' => '<p><big style="font-weight: bold;">Expirimental feature!</big></p>',
+      '#markup' => '<p><big style="font-weight: bold;">Experimental feature!</big></p>',
     ),
     'to' => array(
       '#type' => 'textfield',
