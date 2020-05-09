@@ -1,0 +1,6 @@
+system_menu.mail_debugger.wizard:
+  title: Mail Debugger
+  parent: system.admin_config_development
+  description: 'Debug mail.'
+  route_name: mail_debugger.wizard
+
