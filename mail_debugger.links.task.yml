@@ -1,0 +1,10 @@
+mail_debugger.wizard:
+  route_name: mail_debugger.wizard
+  title: Mail debugger
+  base_route: mail_debugger.wizard
+  weight: -100
+
+mail_debugger.user:
+  route_name: mail_debugger.user
+  title: User mail debugger
+  base_route: mail_debugger.wizard
