@@ -40,7 +40,7 @@ class MailDebuggerForm extends FormBase {
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -50,14 +50,14 @@ class MailDebuggerForm extends FormBase {
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function getFormId() {
     return "mail_debugger_form";
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     return [
@@ -90,7 +90,7 @@ class MailDebuggerForm extends FormBase {
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->storage->set('to', $form_state->getValue('to'));

@@ -52,7 +52,7 @@ class UsermailDebuggerForm extends FormBase {
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -63,14 +63,14 @@ class UsermailDebuggerForm extends FormBase {
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function getFormId() {
     return "usermail_debugger_form";
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     return [
@@ -115,7 +115,7 @@ class UsermailDebuggerForm extends FormBase {
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->defaultsStorage->set('user', $form_state->getValue('user'));
