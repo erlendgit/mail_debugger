@@ -1,7 +1,0 @@
-name = Mail debugger API
-description = Framework for testing the mail system
-core = 7.x
-package = Development
-configure = admin/config/development/mail_debugger
-tags[] = developer
-dependencies[] = user_variable
