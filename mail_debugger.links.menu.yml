@@ -4,9 +4,3 @@ system_menu.mail_debugger.wizard:
   description: 'Debug mail.'
   route_name: mail_debugger.wizard
 
-system_menu.mail_debugger.user:
-  title: User mail debugger
-  parent: system_menu.mail_debugger.wizard
-  description: 'Debug user mail'
-  route_name: mail_debugger.user
-

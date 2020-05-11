@@ -8,13 +8,9 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class MailDebuggerForm.
- *
- * @package Drupal\mail_debugger\Form
- */
 class MailDebuggerForm extends FormBase {
 
   /**
@@ -27,12 +23,6 @@ class MailDebuggerForm extends FormBase {
    */
   protected $mailManager;
 
-  /**
-   * MailDebuggerForm constructor.
-   *
-   * @param \Drupal\Core\KeyValueStore\KeyValueFactoryInterface $storageFactory
-   * @param \Drupal\Core\Mail\MailManagerInterface $mailManager
-   */
   public function __construct(KeyValueFactoryInterface $storageFactory,
                               MailManagerInterface $mailManager) {
     $this->storage = $storageFactory->get(static::class);
@@ -87,6 +77,7 @@ class MailDebuggerForm extends FormBase {
         ],
       ],
     ];
+    // TODO: Implement buildForm() method.
   }
 
   /**
