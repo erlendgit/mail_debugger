@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MailDebuggerForm extends FormBase {
 
+  use MessengerTrait;
+
   /**
    * @var \Drupal\Core\KeyValueStore\KeyValueStoreInterface
    */
