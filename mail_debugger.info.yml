@@ -1,6 +1,7 @@
 name: Mail Debugger
 description: Send mails for debugging purposes.
 core: 8.x
+core_version_requirement: ^8 || ^9
 type: module
 package: development
 configure: admin/config/development/mail_debugger
