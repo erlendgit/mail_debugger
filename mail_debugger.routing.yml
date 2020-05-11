@@ -1,7 +1,0 @@
-mail_debugger.wizard:
-  path: admin/config/development/mail_debugger
-  defaults:
-    _form: Drupal\mail_debugger\Form\MailDebuggerForm
-    _title: Mail Debugger
-  requirements:
-    _permission: 'access mail_debugger'

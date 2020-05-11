@@ -1,0 +1,5 @@
+name = Mail debugger PHP (Experimental)
+description = Mail debugger extention to deal with any mail handler, allowing raw PHP
+package = Development
+dependencies[] = mail_debugger
+core = 7.x
