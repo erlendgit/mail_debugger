@@ -2,7 +2,7 @@ mail_debugger.wizard:
   path: admin/config/development/mail_debugger
   defaults:
     _form: Drupal\mail_debugger\Form\MailDebuggerForm
-    _title: Mail debugger
+    _title: Mail Debugger
   requirements:
     _permission: 'access mail_debugger'
 
@@ -10,6 +10,6 @@ mail_debugger.user:
   path: admin/config/development/mail_debugger/user
   defaults:
     _form: Drupal\mail_debugger\Form\UsermailDebuggerForm
-    _title: User mail debugger
+    _title: Usermail Debugger
   requirements:
     _permission: 'access mail_debugger'
